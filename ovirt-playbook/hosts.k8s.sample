@@ -1,0 +1,32 @@
+## k8s inventory example
+
+bastion-01  ansible_host=10.65.40.10 ansible_user=ssong ansible_hostname=bastion-01.mwk8s.com 
+master-01   ansible_host=10.65.40.11 ansible_user=ssong ansible_hostname=master-01.mwk8s.com
+master-02   ansible_host=10.65.40.12 ansible_user=ssong ansible_hostname=master-02.mwk8s.com
+master-03   ansible_host=10.65.40.13 ansible_user=ssong ansible_hostname=master-03.mwk8s.com
+worker-01   ansible_host=10.65.40.14 ansible_user=ssong ansible_hostname=worker-01.mwk8s.com
+worker-02   ansible_host=10.65.40.15 ansible_user=ssong ansible_hostname=worker-02.mwk8s.com
+route-01    ansible_host=10.65.40.16 ansible_user=ssong ansible_hostname=route-01.mwk8s.com
+route-02    ansible_host=10.65.40.17 ansible_user=ssong ansible_hostname=route-02.mwk8s.com
+infra-01    ansible_host=10.65.40.18 ansible_user=ssong ansible_hostname=infra-01.mwk8s.com
+infra-02    ansible_host=10.65.40.19 ansible_user=ssong ansible_hostname=infra-02.mwk8s.com
+
+[bastion]
+bastion-01
+
+[master]
+master-01
+master-02
+master-03
+
+[worker]
+worker-01
+worker-02
+
+[route]
+route-01 
+route-02
+
+[infra]
+infra-01 
+infra-02

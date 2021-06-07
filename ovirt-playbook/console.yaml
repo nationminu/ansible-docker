@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  gather_facts: false
+  become: no
+  vars: 
+    ansible_connection: local
+
+  tasks: 
+    - name: include vars
+      include_vars: "{{ playbook_dir }}/config.yaml" 
+
+    - name: Create a ticket for console for a running VM
+      ovirt.ovirt.ovirt_vm:
+        auth:
+          url: "{{ ovirt_url }}"
+          insecure: yes
+          username: "{{ ovirt_username }}"
+          password: "{{ ovirt_password }}"
+        name: ansible_vm
+        ticket: true
+        state: running
+      register: myvm
+
+    - name: Save ticket to file
+      ansible.builtin.copy:
+        content: "{{ myvm.vm.remote_vv_file }}"
+        dest: ~/console.vv
+
+    - name: Run remote viewer with file
+      ansible.builtin.command: remote-viewer ~/console.vv

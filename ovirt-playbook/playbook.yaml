@@ -1,0 +1,72 @@
+---
+- hosts: localhost
+  gather_facts: false
+  become: no
+  vars: 
+    ansible_connection: local
+
+  vars_files:
+    # Contains encrypted `engine_password` varibale using ansible-vault
+    - "{{ playbook_dir }}/config.yaml"
+
+  tasks: 
+    - block:
+      - name: Obtain SSO token with using username/password credentials
+        ovirt.ovirt.ovirt_auth:
+          url: "{{ ovirt_url }}"
+          insecure: yes
+          username: "{{ ovirt_username }}"
+          password: "{{ ovirt_password }}"
+                
+      - name: Creates a new Virtual Machine from template named 'centos-cloud-init'
+        ovirt.ovirt.ovirt_vm: 
+          auth: "{{ ovirt_auth }}"
+          state: absent 
+          name: ansible_vm
+          template: centos79-template-cloudinit
+          cluster: PST_CL
+          delete_protected: no
+          description: Automation VirtualMachine using Ansible
+          comment: "Automation = IP : 10.65.40.10"
+          memory: 8GiB
+          cpu_cores: 4
+          cpu_sockets: 2 
+          cpu_threads: 1
+          cloud_init_persist: yes
+          cloud_init:
+            dns_servers: '8.8.8.8 8.8.4.4'
+            nic_boot_protocol: static
+            nic_ip_address: 10.65.40.10
+            nic_netmask: 255.255.252.0
+            nic_gateway: 10.65.40.1
+            nic_name: eth0
+            host_name: bootstrap
+            custom_script: |
+              write_files:
+              - content: |
+                  Hello, world!
+                path: /tmp/greeting.txt
+                permissions: '0644'
+            user_name: ssong
+  #          root_password: super_password
+            authorized_ssh_keys: "{{ vm_auth_key }}"
+
+      - name: Create and attach new disk to VM
+        ovirt.ovirt.ovirt_disk: 
+          auth: "{{ ovirt_auth }}"
+          state: absent 
+          name: ansible_vm_disk
+          vm_name: ansible_vm
+          size: 100GiB
+          format: cow
+          interface: virtio_scsi
+          storage_domain: 00_STORAGE_SAN
+
+      always:
+        - name: Always revoke the SSO token
+          ovirt_auth:
+            state: absent
+            ovirt_auth: "{{ ovirt_auth }}"
+
+  collections:
+    - ovirt.ovirt      

@@ -1,0 +1,19 @@
+## k8s inventory example
+
+bastion-01  ansible_host=10.65.40.10 ansible_user=ssong ansible_hostname=bastion-01.mwspace.com disk_used=true
+web-01      ansible_host=10.65.40.11 ansible_user=ssong ansible_hostname=web-01.mwspace.com 
+web-02      ansible_host=10.65.40.12 ansible_user=ssong ansible_hostname=web-02.mwspace.com 
+was-01      ansible_host=10.65.40.13 ansible_user=ssong ansible_hostname=was-01.mwspace.com  
+was-02      ansible_host=10.65.40.14 ansible_user=ssong ansible_hostname=was-02.mwspace.com  
+
+[bastion]
+bastion-01
+
+[web]
+web-01 
+web-02
+
+[was]
+was-01
+was-02
+ 
