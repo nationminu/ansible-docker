@@ -63,3 +63,34 @@ web-02 | SUCCESS => {
     "ping": "pong"
 }
 ```
+
+# Ansible Galaxy Disconnected
+
+## ansible collection install or download
+https://galaxy.ansible.com/openstack/cloud
+```
+# ansible-galaxy collection install community.vmware -p ./collections
+Starting collection install process
+Installing 'community.vmware:1.10.0' to '/code/collections/ansible_collections/community/vmware' 
+```
+
+```
+# ansible-galaxy collection install ./community-vmware-1.10.0.tar.gz -p collections
+
+Starting galaxy collection install process
+Process install dependency map
+Starting collection install process
+Installing 'community.kubernetes:1.2.0' to '/home/devops/devops/workshops/ansible-collections-demo/collections/ansible_collections/community/kubernetes'
+community.kubernetes (1.2.0) was installed successfully
+
+# ansible-doc community.vmware.vmware_host
+```
+
+## PIP package download
+```
+mkdir openstacksdk && cd openstacksdk
+
+pip3 download openstacksdk
+
+pip3 install --no-index --find-links . openstacksdk
+```
